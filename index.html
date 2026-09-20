@@ -95,8 +95,15 @@ npm run dev</pre>
         window.addEventListener('error', function (event) {
           firstError =
             firstError ||
-            (event.message ? event.message : 'Failed to load ' + (event.filename || 'a script'))
-        })
+            (event.message ||
+              'Failed to load ' +
+                ((event.target && (event.target.src || event.target.href)) ||
+                  event.filename ||
+                  'a script'))
+          // Capture phase: a failed <script> or <link> load fires on the element
+          // and never bubbles, so a bubble-phase window listener never sees it. That
+          // is why a 404 on the module below used to report "no error".
+        }, true)
         window.addEventListener('unhandledrejection', function (event) {
           var reason = event.reason
           firstError = firstError || (reason && reason.message ? reason.message : String(reason))

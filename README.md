@@ -19,6 +19,29 @@ npm install
 npm run dev     # http://localhost:5173
 ```
 
+**This tool is local-only. Do not upload it to GitHub Pages.** It was published
+to `vevris.github.io/vclypsv/` on 2026-09-20 and had to be taken down. Two
+things go wrong:
+
+- Pages is a static host, it never runs `npm run dev`, so `index.html`'s
+  request for `src/main.tsx` cannot be served. Browsers cannot execute `.tsx`
+  in any case; Pages sends it as `application/octet-stream` and the module is
+  refused. Only a built `dist/` could ever work, and only with
+  `base: '/vclypsv/'` set in `vite.config.ts`, without it the bundle asks
+  for `/assets/...` at the domain root and 404s.
+- The GitHub web uploader flattens folders, so `src/` landed in the repo root
+  and `supabaseClient.ts` became publicly readable. The publishable key is
+  public by design, but the row-level security policies on this project are
+  open to everyone for read, insert, update and delete, so the key being
+  readable is enough for a stranger to rewrite the release history. Nothing
+  was written in the event. Rotate the publishable key after any such
+  exposure: deleting the repo does not un-publish what was already served.
+
+If this ever needs to be reachable from more than one machine, add Supabase
+Auth and tighten the policies from `true` to `authenticated` first. They cannot
+be tightened while the app has no sign-in, because without one the app is the
+anonymous public.
+
 There is nothing to configure — the Supabase project details are built into
 `src/supabaseClient.ts`.
 
