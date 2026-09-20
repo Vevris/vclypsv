@@ -14,10 +14,21 @@ It does four things and deliberately nothing else:
 
 Needs **Node.js 18.18 or newer** (`node -v` to check).
 
+Double-click **`Release Manager.cmd`**. It starts the server and opens the app
+in your browser. Keep the console window open while you use it; closing it
+stops the app.
+
+The long way, if you prefer a terminal:
+
 ```bash
 npm install
 npm run dev     # http://localhost:5173
 ```
+
+The launcher calls `node node_modules\vite\bin\vite.js` rather than
+`npm run dev`, so it works on shells where npm is not on the PATH. Do not
+rename it to anything beginning with the word "Start": `cmd /c "Start X.cmd"`
+parses that as the `start` builtin and fails with "cannot find the file".
 
 **This tool is local-only. Do not upload it to GitHub Pages.** It was published
 to `vevris.github.io/vclypsv/` on 2026-09-20 and had to be taken down. Two
